@@ -11,6 +11,7 @@
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
 
 <style>
+.delete-job-btn{display:inline-flex;align-items:center;gap:7px;padding:9px 13px;border:1px solid #fed7aa;border-radius:10px;background:#fff7ed;color:#c2410c;font-size:12px;font-weight:800;cursor:pointer;transition:background .2s ease,color .2s ease,border-color .2s ease}.delete-job-btn:hover{border-color:#ea580c;background:#ea580c;color:#fff}
 *{
     margin:0;
     padding:0;
@@ -378,7 +379,7 @@ if (! empty($posted_jobs)) {
                             <td><?php
         echo (int) $job['total_applications'];
         ?></td>
-                            <td><form method="POST" action="{{ route('employer.jobs.destroy', ['job' => $job['id']]) }}" onsubmit="return confirm('Delete this job posting? Postings with applications will be closed instead so application history is preserved.');">@csrf @method('DELETE')<button type="submit" class="btn btn-sm btn-outline-danger"><i class="fas fa-trash"></i> Delete</button></form></td>
+                            <td><form method="POST" action="{{ route('employer.jobs.destroy', ['job' => $job['id']]) }}" onsubmit="return confirm('Delete this job posting? Postings with applications will be closed instead so application history is preserved.');">@csrf @method('DELETE')<button type="submit" class="delete-job-btn"><i class="fas fa-trash"></i> Delete</button></form></td>
                         </tr>
 
                     <?php
