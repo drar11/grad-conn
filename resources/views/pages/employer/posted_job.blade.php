@@ -11,6 +11,7 @@
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
 
 <style>
+.employer-job-card-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:16px;padding:4px}.employer-job-card{padding:20px;border:1px solid #e2e8f0;border-radius:18px;background:#fff;box-shadow:0 6px 20px rgba(15,23,42,.06)}.employer-job-card:hover{border-color:#fdba74;box-shadow:0 10px 28px rgba(234,88,12,.12)}.employer-job-card__head{display:flex;justify-content:space-between;gap:12px}.employer-job-card h3{margin:0;color:#172033;font-size:20px}.employer-job-card__company{margin:6px 0;color:#64748b}.employer-job-card__meta{display:flex;flex-wrap:wrap;gap:7px;margin:14px 0}.employer-job-card__meta span{padding:6px 9px;border-radius:999px;background:#fff7ed;color:#c2410c;font-size:11px;font-weight:800}.employer-job-card__dates{padding:12px;border-radius:12px;background:#f8fafc;color:#475569;font-size:13px;line-height:1.7}.employer-job-card__actions{display:flex;flex-wrap:wrap;gap:8px;margin-top:16px}.employer-job-card__actions a{display:inline-flex;padding:9px 12px;border-radius:9px;background:#fff7ed;color:#c2410c;font-size:12px;font-weight:800;text-decoration:none}.employer-job-card__actions a.primary{background:#f97316;color:#fff}.employer-job-card-grid+.table-wrap,.section-card>table{display:none}@media(max-width:800px){.employer-job-card-grid{grid-template-columns:1fr}}
 .delete-job-btn{display:inline-flex;align-items:center;gap:7px;padding:9px 13px;border:1px solid #fed7aa;border-radius:10px;background:#fff7ed;color:#c2410c;font-size:12px;font-weight:800;cursor:pointer;transition:background .2s ease,color .2s ease,border-color .2s ease}.delete-job-btn:hover{border-color:#ea580c;background:#ea580c;color:#fff}
 *{
     margin:0;
@@ -274,6 +275,14 @@ if ($error) {
 ?>
 
     <div class="section-card">
+        @if(!empty($posted_jobs))
+        <div class="employer-job-card-grid">
+        @foreach($posted_jobs as $job)
+            @php($expired = !empty($job['end_date']) && $today > $job['end_date'])
+            <article class="employer-job-card"><div class="employer-job-card__head"><div><h3>{{ $job['title'] }}</h3><div class="employer-job-card__company">{{ $job['employer_company'] ?: $job['company'] }} @if($job['location']) · {{ $job['location'] }} @endif</div></div><span class="badge {{ $job['is_open'] && !$expired ? 'badge-open' : 'badge-closed' }}">{{ $job['is_open'] && !$expired ? 'Open' : 'Closed' }}</span></div><div class="employer-job-card__meta"><span>{{ $job['job_type'] ?: 'Job' }}</span><span>{{ $job['total_applications'] }} applications</span>@if($expired)<span>Expired</span>@endif</div><div class="employer-job-card__dates"><strong>Posting period</strong><br>{{ $job['start_date'] ? date('M d, Y', strtotime($job['start_date'])) : 'Immediately' }} – {{ $job['end_date'] ? date('M d, Y', strtotime($job['end_date'])) : 'No end date' }}</div><div class="employer-job-card__actions"><a class="primary" href="{{ route('employer.applications', ['job_id' => $job['id']]) }}"><i class="fas fa-users"></i> View applications</a><form method="POST" action="{{ route('employer.jobs.destroy', ['job' => $job['id']]) }}" onsubmit="return confirm('Delete this job posting? Postings with applications will be closed instead.');">@csrf @method('DELETE')<button type="submit" class="delete-job-btn"><i class="fas fa-trash"></i> Delete</button></form></div></article>
+        @endforeach
+        </div>
+        @endif
         
 
         <?php
