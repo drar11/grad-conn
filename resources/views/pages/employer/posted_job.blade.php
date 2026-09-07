@@ -290,6 +290,7 @@ if (! empty($posted_jobs)) {
                         <th>Schedule Status</th>
                         <th>Posting Status</th>
                         <th>Applications</th>
+                        <th>Actions</th>
                     </tr>
                 </thead>
 
@@ -377,6 +378,7 @@ if (! empty($posted_jobs)) {
                             <td><?php
         echo (int) $job['total_applications'];
         ?></td>
+                            <td><form method="POST" action="{{ route('employer.jobs.destroy', ['job' => $job['id']]) }}" onsubmit="return confirm('Delete this job posting? Postings with applications will be closed instead so application history is preserved.');">@csrf @method('DELETE')<button type="submit" class="btn btn-sm btn-outline-danger"><i class="fas fa-trash"></i> Delete</button></form></td>
                         </tr>
 
                     <?php

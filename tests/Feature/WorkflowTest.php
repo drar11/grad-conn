@@ -480,6 +480,19 @@ final class WorkflowTest extends TestCase
         $this->assertDatabaseMissing('jobs', ['id' => $jobId]);
     }
 
+    public function test_employer_can_delete_owned_job_but_cannot_delete_another_employers_job(): void
+    {
+        $owner = $this->user('employer');
+        $other = User::factory()->create(['role' => 'employer', 'status' => 'approved', 'is_active' => 1]);
+        $jobId = DB::table('jobs')->insertGetId([
+            'title' => 'Employer delete route test', 'company' => 'Test Company', 'employer_company' => 'Test Company',
+            'description' => 'Test', 'posted_by' => $owner->id, 'employer_id' => $owner->id, 'is_open' => 1,
+        ]);
+        $this->actingAs($other)->delete(route('employer.jobs.destroy', $jobId))->assertForbidden();
+        $this->actingAs($owner)->delete(route('employer.jobs.destroy', $jobId))->assertRedirect(route('employer.posted_job'));
+        $this->assertDatabaseMissing('jobs', ['id' => $jobId]);
+    }
+
     public function test_alumni_can_delete_only_their_certificate_through_the_resource_route(): void
     {
         $owner = $this->user('alumni');

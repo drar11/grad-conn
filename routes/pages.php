@@ -12,6 +12,7 @@ use App\Http\Controllers\Alumni\StoreEmploymentController;
 use App\Http\Controllers\Application\AlumniApplicationActionController;
 use App\Http\Controllers\Application\StoreApplicationController;
 use App\Http\Controllers\Application\UpdateApplicationStatusController;
+use App\Http\Controllers\Employer\DestroyJobController as EmployerDestroyJobController;
 use App\Http\Controllers\Employer\SendJobOfferController;
 use App\Http\Controllers\Event\ArchiveEventController;
 use App\Http\Controllers\Event\DestroyEventController;
@@ -148,6 +149,7 @@ Route::get('/employer/interview', EmployerInterviewController::class)->middlewar
 Route::get('/employer/job_offers', fn () => to_route('employer.applications', status: 301))->middleware('account:employer')->name('employer.job_offers');
 Route::get('/employer/post_job', EmployerPostJobController::class)->middleware('account:employer')->name('employer.post_job');
 Route::get('/employer/posted_job', EmployerPostedJobController::class)->middleware('account:employer')->name('employer.posted_job');
+Route::delete('/employer/jobs/{job}', EmployerDestroyJobController::class)->middleware('account:employer')->name('employer.jobs.destroy');
 Route::get('/profile', ProfileController::class)->middleware('account')->name('profile');
 Route::patch('/profile/notifications', UpdateNotificationPreferenceController::class)->middleware('account:alumni')->name('profile.notifications.update');
 Route::post('/profile/certificates', StoreCertificateController::class)->middleware('account:alumni')->name('profile.certificates.store');
