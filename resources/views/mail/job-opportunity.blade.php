@@ -12,7 +12,7 @@ Hello {{ $recipient->fullname ?: 'Alumni' }},
 
 {{ $job->description }}
 
-<x-mail::button :url="url('/alumni/job_details?id='.$job->id)">
+<x-mail::button :url="route('alumni.job_details', ['id' => $job->id])">
 View Job
 </x-mail::button>
 

@@ -122,12 +122,13 @@ img {
 
 .header-card td {
     padding: 24px 32px 26px;
-    text-align: left;
+    text-align: center;
 }
 
 .brand-line {
     display: block;
     margin-bottom: 22px;
+    text-align: center;
 }
 
 .email-logo {
@@ -142,6 +143,9 @@ img {
 .brand-text {
     color: #ffffff;
     vertical-align: middle;
+    display: inline-block;
+    font-size: 26px;
+    font-weight: 900;
 }
 
 .brand-eyebrow {
