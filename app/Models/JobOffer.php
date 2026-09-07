@@ -14,7 +14,18 @@ final class JobOffer extends Model
 
     protected function casts(): array
     {
-        return ['expires_at' => 'datetime', 'created_at' => 'datetime', 'updated_at' => 'datetime'];
+        return [
+            'accepted_at' => 'datetime',
+            'declined_at' => 'datetime',
+            'expires_at' => 'datetime',
+            'created_at' => 'datetime',
+            'updated_at' => 'datetime',
+        ];
+    }
+
+    public function getRouteKeyName(): string
+    {
+        return 'offer_token';
     }
 
     public function employer()
