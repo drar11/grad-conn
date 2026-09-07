@@ -146,7 +146,7 @@ Route::post('/employer/job-offers', SendJobOfferController::class)->middleware([
 Route::get('/employer/applications', EmployerApplicationsController::class)->middleware('account:employer')->name('employer.applications');
 Route::get('/employer/dashboard', EmployerDashboardController::class)->middleware('account:employer')->name('employer.dashboard');
 Route::get('/employer/interview', EmployerInterviewController::class)->middleware('account:employer')->name('employer.interview');
-Route::get('/employer/job_offers', fn () => to_route('employer.applications', status: 301))->middleware('account:employer')->name('employer.job_offers');
+Route::get('/employer/job_offers', fn () => to_route('employer.posted_job', status: 301))->middleware('account:employer')->name('employer.job_offers');
 Route::get('/employer/post_job', EmployerPostJobController::class)->middleware('account:employer')->name('employer.post_job');
 Route::get('/employer/posted_job', EmployerPostedJobController::class)->middleware('account:employer')->name('employer.posted_job');
 Route::delete('/employer/jobs/{job}', EmployerDestroyJobController::class)->middleware('account:employer')->name('employer.jobs.destroy');

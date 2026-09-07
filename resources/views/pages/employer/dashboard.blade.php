@@ -21,7 +21,7 @@
                 <div class="application-row"><div><strong>{{ $application['fullname'] ?: 'Applicant' }}</strong><br><small>{{ $application['title'] }} · {{ ucfirst(str_replace('_',' ',$application['status'])) }}</small></div><a href="{{ route('employer.applications', ['job_id' => $application['job_id']]) }}">Review</a></div>
             @empty<div class="empty">No applications have been submitted yet.</div>@endforelse
         </div>
-        <aside class="panel"><h2>Recruitment</h2><p>Common employer actions.</p><div class="quick-links"><a href="{{ route('employer.posted_job') }}">Manage Posted Jobs</a><a href="{{ route('employer.applications') }}">Review Applications</a><a href="{{ route('profile') }}">Edit About Company</a></div></aside>
+        <aside class="panel"><h2>Recruitment</h2><p>Common employer actions.</p><div class="quick-links"><a href="{{ route('employer.posted_job') }}">Manage Posted Jobs</a><a href="{{ route('profile') }}">Edit About Company</a></div></aside>
     </section>
 </div>
 @endsection

@@ -66,7 +66,6 @@
                 ['employer.alumni_list', 'fa-user-graduate', 'Alumni List'],
                 ['employer.post_job', 'fa-plus-circle', 'Create Job'],
                 ['employer.posted_job', 'fa-briefcase', 'Posted Jobs'],
-                ['employer.applications', 'fa-file-signature', 'Applications'],
             ]],
             ['Account', [
                 ['profile', 'fa-user-circle', 'My Profile'],

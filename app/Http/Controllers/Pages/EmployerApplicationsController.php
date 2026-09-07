@@ -16,6 +16,10 @@ final class EmployerApplicationsController extends PageController
             return app(FileController::class)->resume($request);
         }
 
+        if (! $request->filled('job_id')) {
+            return to_route('employer.posted_job');
+        }
+
         return $this->renderPage(function () use ($request) {
             $employer_id = $request->user()->id;
             $success = session('status', '');
