@@ -17,7 +17,7 @@ final class SendJobNotificationController extends Controller
         $recipients = User::query()->where('role', 'alumni')->where('is_active', 1)
             ->where(fn ($query) => $query->where('receive_update_notifications', 1)->orWhereNull('receive_update_notifications'))
             ->whereNotNull('email')->where('email', '<>', '')
-            ->when(filled($job->target_course), fn ($query) => $query->where('course', $job->target_course))
+            ->when(filled($job->target_course) && $job->target_course !== 'Open For All', fn ($query) => $query->where('course', $job->target_course))
             ->get();
         foreach ($recipients as $recipient) {
             Mail::to($recipient)->queue(new JobOpportunityMail($job, $recipient, $request->string('subject')->toString(), $request->string('message')->toString()));

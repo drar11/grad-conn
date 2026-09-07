@@ -363,6 +363,7 @@ echo htmlspecialchars(old('location', request()->input('location')) ?? '');
                     <label class="form-label">Target Course</label>
                     <select class="form-select-custom" name="target_course" required>
                         <option value="">Select the most relevant course</option>
+                        <option value="Open For All" @selected(old('target_course') === 'Open For All')>Open For All</option>
                         @foreach(config('gradconn.courses') as $course)
                             <option value="{{ $course }}" @selected(old('target_course') === $course)>{{ $course }}</option>
                         @endforeach

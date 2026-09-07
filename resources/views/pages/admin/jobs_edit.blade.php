@@ -304,6 +304,7 @@ if ($error) {
                 <div class="col-12">
                     <label class="form-label">Target Course</label>
                     <select name="target_course" class="form-select-custom" required>
+                        <option value="Open For All" @selected(old('target_course', $job['target_course'] ?? '') === 'Open For All')>Open For All</option>
                         @foreach(config('gradconn.courses') as $course)
                             <option value="{{ $course }}" @selected(old('target_course', $job['target_course'] ?? '') === $course)>{{ $course }}</option>
                         @endforeach

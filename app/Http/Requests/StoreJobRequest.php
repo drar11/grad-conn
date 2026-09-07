@@ -24,7 +24,7 @@ class StoreJobRequest extends FormRequest
             'end_date' => ['required', 'date', 'after_or_equal:start_date'],
             'description' => ['required', 'string', 'max:20000'],
             'requirements' => ['required', 'string', 'max:20000'],
-            'target_course' => ['required', Rule::in(config('gradconn.courses'))],
+            'target_course' => ['required', Rule::in([...config('gradconn.courses'), 'Open For All'])],
             'is_open' => ['nullable', Rule::in(['0', '1', 0, 1, 'on'])],
         ];
     }

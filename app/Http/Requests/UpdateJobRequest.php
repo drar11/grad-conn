@@ -24,7 +24,7 @@ final class UpdateJobRequest extends FormRequest
             'job_type' => ['required', 'string', 'max:100'],
             'description' => ['required', 'string', 'max:20000'],
             'requirements' => ['required', 'string', 'max:20000'],
-            'target_course' => ['required', Rule::in(config('gradconn.courses'))],
+            'target_course' => ['required', Rule::in([...config('gradconn.courses'), 'Open For All'])],
             'start_date' => ['required', 'date'],
             'end_date' => ['required', 'date', 'after_or_equal:start_date'],
             'is_open' => ['required', Rule::in(['0', '1', 0, 1])],
