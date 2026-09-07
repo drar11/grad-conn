@@ -1,3 +1,9 @@
+@php
+    $publicUrl = rtrim((string) config('app.url'), '/');
+    if ($publicUrl === '' || str_contains($publicUrl, 'localhost') || str_contains($publicUrl, '127.0.0.1')) {
+        $publicUrl = 'https://gradconn.onrender.com';
+    }
+@endphp
 <x-mail::message title="New Job Opportunity" eyebrow="Alumni Job Notification">
 # {{ $customSubject ?: 'New Job Opportunity' }}
 
@@ -12,7 +18,7 @@ Hello {{ $recipient->fullname ?: 'Alumni' }},
 
 {{ $job->description }}
 
-<x-mail::button :url="route('alumni.job_details', ['id' => $job->id])">
+<x-mail::button :url="$publicUrl.'/alumni/job_details?id='.$job->id">
 View Job
 </x-mail::button>
 
