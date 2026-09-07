@@ -23,7 +23,7 @@ final class AdminDashboardController extends PageController
             $employmentRate = 0;
             $alignmentRate = 0;
             $metrics = Cache::remember('dashboard.admin.metrics.v1', config('performance.dashboard_cache_seconds'), function () {
-                $alumni = User::query()->where('role', 'alumni')->where('is_active', true)->selectRaw("COUNT(*) total, SUM(CASE WHEN LOWER(TRIM(employment_status)) = 'employed' THEN 1 ELSE 0 END) employed, SUM(CASE WHEN LOWER(TRIM(employment_status)) = 'unemployed' THEN 1 ELSE 0 END) unemployed, SUM(CASE WHEN LOWER(TRIM(employment_status)) = 'employed' AND LOWER(TRIM(job_aligned)) = 'yes' THEN 1 ELSE 0 END) aligned, SUM(CASE WHEN LOWER(TRIM(employment_status)) = 'employed' AND LOWER(TRIM(job_aligned)) = 'no' THEN 1 ELSE 0 END) not_aligned")->first();
+                $alumni = User::query()->where('role', 'alumni')->where('status', 'approved')->where('is_active', true)->selectRaw("COUNT(*) total, SUM(CASE WHEN LOWER(TRIM(employment_status)) = 'employed' THEN 1 ELSE 0 END) employed, SUM(CASE WHEN LOWER(TRIM(employment_status)) = 'unemployed' THEN 1 ELSE 0 END) unemployed, SUM(CASE WHEN LOWER(TRIM(employment_status)) = 'employed' AND LOWER(TRIM(job_aligned)) = 'yes' THEN 1 ELSE 0 END) aligned, SUM(CASE WHEN LOWER(TRIM(employment_status)) = 'employed' AND LOWER(TRIM(job_aligned)) = 'no' THEN 1 ELSE 0 END) not_aligned")->first();
 
                 return [
                     'jobs' => Job::query()->count(),

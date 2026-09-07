@@ -27,7 +27,7 @@ final class AdminReportsController extends PageController
                     'vacancies' => Job::query()->count(),
                     'employer_jobs' => Job::query()->whereHas('poster', fn ($query) => $query->where('role', 'employer'))->count(),
                     'admin_jobs' => Job::query()->whereHas('poster', fn ($query) => $query->where('role', 'admin'))->count(),
-                    'enrolled_alumni' => User::query()->where('role', 'alumni')->where('is_active', true)->count(),
+                    'enrolled_alumni' => User::query()->where('role', 'alumni')->where('status', 'approved')->where('is_active', true)->count(),
                     'applicants' => JobApplication::query()->count(),
                     'using_alumni' => JobApplication::query()->distinct('alumni_id')->count('alumni_id'),
                     'hired_alumni' => JobApplication::query()->whereRaw('LOWER(TRIM(status)) = ?', ['hired'])->distinct('alumni_id')->count('alumni_id'),

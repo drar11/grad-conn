@@ -15,7 +15,7 @@ final class AdminJobsNotifyController extends PageController
             $model = Job::findOrFail($request->integer('job_id'));
             $job = $model->getAttributes();
             $target_course = trim((string) $model->target_course);
-            $recipients = User::query()->where('role', 'alumni')->where('is_active', 1)
+            $recipients = User::query()->where('role', 'alumni')->where('status', 'approved')->where('is_active', 1)
                 ->where(fn ($query) => $query->where('receive_update_notifications', 1)->orWhereNull('receive_update_notifications'))
                 ->whereNotNull('email')->where('email', '<>', '')
                 ->when($target_course !== '' && $target_course !== 'Open For All', fn ($query) => $query->where('course', $target_course))

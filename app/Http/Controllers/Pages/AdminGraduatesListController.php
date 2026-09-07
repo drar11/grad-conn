@@ -13,7 +13,7 @@ final class AdminGraduatesListController extends PageController
         return $this->renderPage(function () use ($request) {
             $batch_year = trim((string) $request->query('batch_year', ''));
             $course = trim((string) $request->query('course', ''));
-            $query = DB::table('users')->where('role', 'alumni')->where('is_active', true);
+            $query = DB::table('users')->where('role', 'alumni')->where('status', 'approved')->where('is_active', true);
             $title = 'Graduates List';
             if ($batch_year !== '') {
                 $query->where('batch_year', $batch_year);

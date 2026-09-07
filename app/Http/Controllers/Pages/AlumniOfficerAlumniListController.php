@@ -11,7 +11,7 @@ final class AlumniOfficerAlumniListController extends PageController
     public function __invoke(Request $request)
     {
         return $this->renderPage(function () {
-            $alumniModels = User::query()->where('role', 'alumni')->with(['education', 'certificates', 'employmentHistory', 'degrees'])->latest('id')->get();
+            $alumniModels = User::query()->where('role', 'alumni')->where('status', 'approved')->where('is_active', true)->with(['education', 'certificates', 'employmentHistory', 'degrees'])->latest('id')->get();
             $alumni = $alumniModels->map->toArray()->all();
             $educationByUser = $alumniModels->mapWithKeys(fn ($user) => [$user->id => $user->education->map->toArray()->all()])->all();
             $certificatesByUser = $alumniModels->mapWithKeys(fn ($user) => [$user->id => $user->certificates->map->toArray()->all()])->all();

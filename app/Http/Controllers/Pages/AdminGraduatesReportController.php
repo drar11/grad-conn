@@ -15,7 +15,7 @@ final class AdminGraduatesReportController extends PageController
             if (! in_array($report_type, ['batch', 'department'], true)) {
                 $report_type = 'batch';
             }
-            $base = DB::table('users')->where('role', 'alumni')->where('is_active', true);
+            $base = DB::table('users')->where('role', 'alumni')->where('status', 'approved')->where('is_active', true);
             $totalGraduates = (clone $base)->count();
             $batchReport = (clone $base)->whereNotNull('batch_year')->where('batch_year', '<>', '')
                 ->select('batch_year as label', DB::raw('COUNT(*) as total'))->groupBy('batch_year')

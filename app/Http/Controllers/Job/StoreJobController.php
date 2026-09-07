@@ -30,7 +30,7 @@ final class StoreJobController extends Controller
         $job = new Job;
         $job->forceFill($data)->save();
         Cache::forget('feed.sidebar-jobs.v1');
-        User::query()->where('role', 'alumni')->where('is_active', 1)
+        User::query()->where('role', 'alumni')->where('status', 'approved')->where('is_active', 1)
             ->where(fn ($query) => $query->where('receive_update_notifications', 1)->orWhereNull('receive_update_notifications'))
             ->whereNotNull('email')->where('email', '<>', '')->eachById(function (User $recipient) use ($job) {
                 Mail::to($recipient)->queue(new JobOpportunityMail($job, $recipient));

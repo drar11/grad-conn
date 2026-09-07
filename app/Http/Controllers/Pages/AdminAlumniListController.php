@@ -13,7 +13,7 @@ final class AdminAlumniListController extends PageController
         return $this->renderPage(function () {
             $msg = '';
             $error = '';
-            $alumniModels = User::query()->where('role', 'alumni')->where('is_active', true)
+            $alumniModels = User::query()->where('role', 'alumni')->where('status', 'approved')->where('is_active', true)
                 ->with(['education' => fn ($query) => $query->orderByRaw('COALESCE(end_year, 9999) DESC')->orderByRaw('COALESCE(start_year, 9999) DESC')->latest('id'), 'certificates' => fn ($query) => $query->orderByRaw("COALESCE(issue_date, '0000-00-00') DESC")->latest('id'), 'employmentHistory' => fn ($query) => $query->orderByRaw("COALESCE(end_date, '9999-12-31') DESC")->orderByDesc('start_date')->latest('id'), 'degrees' => fn ($query) => $query->latest('id')])
                 ->latest('id')->get();
             $alumni = $alumniModels->map->toArray()->all();

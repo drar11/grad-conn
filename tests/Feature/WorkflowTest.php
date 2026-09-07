@@ -578,7 +578,11 @@ final class WorkflowTest extends TestCase
         $this->get(route('register'))->assertOk()->assertSee('BLIS');
 
         $employer = $this->user('employer');
+        $pending = User::factory()->create(['fullname' => 'Pending Alumni Hidden', 'role' => 'alumni', 'status' => 'pending', 'is_active' => 1]);
         $this->actingAs($employer)->get('/employer/alumni_list')->assertOk()->assertSee('Talent Directory');
+        $this->actingAs($employer)->get(route('employer.alumni_list'))->assertDontSee($pending->fullname);
+        $this->actingAs($this->user('admin'))->get(route('admin.alumni_list'))->assertDontSee($pending->fullname);
+        $this->actingAs($this->user('alumni_officer'))->get(route('alumni_officer.alumni_list'))->assertDontSee($pending->fullname);
         $this->actingAs($employer)->get('/employer/job_offers')->assertRedirect(route('employer.applications'), 301);
         $this->actingAs($employer)->post('/employer/offers', [])->assertNotFound();
     }

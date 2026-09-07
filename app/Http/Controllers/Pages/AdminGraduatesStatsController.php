@@ -17,7 +17,7 @@ final class AdminGraduatesStatsController extends PageController
                 $view = 'batch';
             }
             $snapshot = Cache::remember('reports.graduate-groups.v1', config('performance.report_cache_seconds'), function () {
-                $base = DB::table('users')->where('role', 'alumni')->where('is_active', true);
+                $base = DB::table('users')->where('role', 'alumni')->where('status', 'approved')->where('is_active', true);
                 $batches = (clone $base)->whereNotNull('batch_year')->where('batch_year', '<>', '')
                     ->select('batch_year', DB::raw('COUNT(*) as total'))->groupBy('batch_year')
                     ->orderByDesc('batch_year')->get()->map(fn ($row) => (array) $row)->all();

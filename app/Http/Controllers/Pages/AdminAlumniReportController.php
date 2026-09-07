@@ -14,7 +14,7 @@ final class AdminAlumniReportController extends PageController
             $courseFilter = trim((string) $request->query('course', ''));
             $batchFilter = trim((string) $request->query('batch_year', ''));
             $reportType = in_array($request->query('report_type'), ['all', 'employed', 'unemployed', 'hired'], true) ? $request->query('report_type') : 'all';
-            $query = DB::table('users')->where('role', 'alumni');
+            $query = DB::table('users')->where('role', 'alumni')->where('status', 'approved')->where('is_active', true);
             if ($courseFilter !== '') {
                 $query->where('course', $courseFilter);
             }
@@ -28,9 +28,9 @@ final class AdminAlumniReportController extends PageController
             }
             $alumni = $query->select('id', 'fullname', 'username', 'email', 'course', 'batch_year', 'created_at')
                 ->orderBy('fullname')->get()->map(fn ($row) => (array) $row)->all();
-            $courses = DB::table('users')->where('role', 'alumni')->whereNotNull('course')->where('course', '<>', '')
+            $courses = DB::table('users')->where('role', 'alumni')->where('status', 'approved')->where('is_active', true)->whereNotNull('course')->where('course', '<>', '')
                 ->distinct()->orderBy('course')->pluck('course')->all();
-            $batches = DB::table('users')->where('role', 'alumni')->whereNotNull('batch_year')->where('batch_year', '<>', '')
+            $batches = DB::table('users')->where('role', 'alumni')->where('status', 'approved')->where('is_active', true)->whereNotNull('batch_year')->where('batch_year', '<>', '')
                 ->distinct()->orderByDesc('batch_year')->pluck('batch_year')->all();
             $totalAlumni = count($alumni);
             $reportTitle = ['all' => 'Alumni Masterlist', 'employed' => 'Employed Alumni', 'unemployed' => 'Unemployed Alumni', 'hired' => 'Alumni Hired Through GradConn'][$reportType];

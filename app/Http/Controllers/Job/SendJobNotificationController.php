@@ -14,7 +14,7 @@ final class SendJobNotificationController extends Controller
     public function __invoke(SendJobNotificationRequest $request)
     {
         $job = Job::findOrFail($request->integer('job_id'));
-        $recipients = User::query()->where('role', 'alumni')->where('is_active', 1)
+        $recipients = User::query()->where('role', 'alumni')->where('status', 'approved')->where('is_active', 1)
             ->where(fn ($query) => $query->where('receive_update_notifications', 1)->orWhereNull('receive_update_notifications'))
             ->whereNotNull('email')->where('email', '<>', '')
             ->when(filled($job->target_course) && $job->target_course !== 'Open For All', fn ($query) => $query->where('course', $job->target_course))

@@ -35,8 +35,8 @@ final class EmployerAlumniListController extends Controller
         }
 
         $alumni = $query->orderBy('fullname')->paginate(24)->withQueryString();
-        $courses = User::query()->where('role', 'alumni')->where('is_active', true)->whereNotNull('course')->where('course', '<>', '')->distinct()->orderBy('course')->pluck('course');
-        $batches = User::query()->where('role', 'alumni')->where('is_active', true)->whereNotNull('batch_year')->where('batch_year', '<>', '')->distinct()->orderByDesc('batch_year')->pluck('batch_year');
+        $courses = User::query()->where('role', 'alumni')->where('status', 'approved')->where('is_active', true)->whereNotNull('course')->where('course', '<>', '')->distinct()->orderBy('course')->pluck('course');
+        $batches = User::query()->where('role', 'alumni')->where('status', 'approved')->where('is_active', true)->whereNotNull('batch_year')->where('batch_year', '<>', '')->distinct()->orderByDesc('batch_year')->pluck('batch_year');
 
         return view('pages.employer.alumni_list', compact('alumni', 'courses', 'batches', 'search', 'course', 'batch'));
     }
