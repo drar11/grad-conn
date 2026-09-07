@@ -40,5 +40,6 @@
         <div class="empty"><h2>No applications yet</h2><p>Applications will appear after alumni apply to one of your posted jobs.</p></div>
     @endforelse
     </div>
+    @if($models->hasPages())<div class="application-pagination">{{ $models->links() }}</div>@endif
 </div>
 @endsection

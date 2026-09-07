@@ -19,10 +19,12 @@ final class EmployerApplicationsController extends PageController
             $employer_id = $request->user()->id;
             $success = session('status', '');
             $error = '';
-            $models = JobApplication::with(['job', 'alumni:id,fullname,email,course,batch_year,career_objective,skills'])
+            $models = JobApplication::query()
+                ->select(['id', 'job_id', 'alumni_id', 'applicant_fullname', 'applicant_email', 'applicant_course', 'applicant_batch_year', 'applicant_career_objective', 'applicant_skills', 'message', 'resume_file', 'status', 'cancel_reason', 'cancelled_at', 'created_at'])
+                ->with(['job:id,title,company,employer_company', 'alumni:id,fullname,email,course,batch_year,career_objective,skills'])
                 ->whereHas('job', fn ($q) => $q->where('posted_by', $employer_id)->orWhere('employer_id', $employer_id))
-                ->orderByDesc('id')->get();
-            $applications = $models->map(fn ($application) => [
+                ->orderByDesc('id')->paginate(50)->withQueryString();
+            $applications = $models->getCollection()->map(fn ($application) => [
                 'application_id' => $application->id,
                 'job_id' => $application->job_id,
                 'job_title' => $application->job?->title,
@@ -39,7 +41,7 @@ final class EmployerApplicationsController extends PageController
                 'cancel_reason' => $application->cancel_reason,
                 'cancelled_at' => $application->cancelled_at,
                 'created_at' => $application->created_at,
-            ])->all();
+            ]);
 
             return $this->pageView('pages.employer.applications', get_defined_vars());
         });
