@@ -130,7 +130,6 @@ Route::post('/profile/employment', StoreEmploymentController::class)->middleware
 Route::delete('/alumni/employment/{employment}', DestroyEmploymentController::class)->middleware('account:alumni')->name('alumni.employment.destroy');
 Route::get('/alumni/feed', AlumniFeedController::class)->middleware('account:alumni')->name('alumni.feed');
 Route::get('/alumni/job_details', AlumniJobDetailsController::class)->middleware('account:alumni')->name('alumni.job_details');
-Route::get('/alumni/job_offers', fn () => to_route('alumni.jobs', status: 301))->middleware('account:alumni')->name('alumni.job_offers');
 Route::get('/alumni/jobs', AlumniJobsController::class)->middleware('account:alumni')->name('alumni.jobs');
 Route::get('/alumni/my_applications', AlumniMyApplicationsController::class)->middleware('account:alumni')->name('alumni.my_applications');
 Route::patch('/alumni/applications/{application}/cancel', [AlumniApplicationActionController::class, 'cancel'])->middleware('account:alumni')->name('applications.cancel');
