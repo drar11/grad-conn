@@ -145,6 +145,7 @@ Route::get('/employer/alumni_list', EmployerAlumniListController::class)->middle
 Route::post('/employer/job-offers', SendJobOfferController::class)->middleware(['account:employer', 'throttle:10,1'])->name('employer.offers.store');
 Route::get('/employer/applications', EmployerApplicationsController::class)->middleware('account:employer')->name('employer.applications');
 Route::get('/employer/dashboard', EmployerDashboardController::class)->middleware('account:employer')->name('employer.dashboard');
+Route::get('/employer/community', AlumniFeedController::class)->middleware('account:employer')->name('employer.community');
 Route::get('/employer/interview', EmployerInterviewController::class)->middleware('account:employer')->name('employer.interview');
 Route::get('/employer/job_offers', fn () => to_route('employer.posted_job', status: 301))->middleware('account:employer')->name('employer.job_offers');
 Route::get('/employer/post_job', EmployerPostJobController::class)->middleware('account:employer')->name('employer.post_job');
@@ -163,8 +164,8 @@ Route::patch('/events/{event}/restore', RestoreEventController::class)->middlewa
 Route::patch('/events/{event}/archive', ArchiveEventController::class)->middleware('account')->name('events.archive');
 Route::delete('/events/{event}', DestroyEventController::class)->middleware('account:admin,alumni_officer')->name('events.destroy');
 Route::post('/events', StoreEventController::class)->middleware('account')->name('events.store');
-Route::post('/feed/{type}/{post}/reaction', [SocialFeedActionController::class, 'reaction'])->where('type', 'event')->middleware('account:admin,alumni,alumni_officer')->name('feed.reactions.store');
-Route::post('/feed/{type}/{post}/comments', [SocialFeedActionController::class, 'comment'])->where('type', 'event')->middleware('account:admin,alumni,alumni_officer')->name('feed.comments.store');
-Route::delete('/feed/comments/{comment}', [SocialFeedActionController::class, 'destroyComment'])->middleware('account:admin,alumni,alumni_officer')->name('feed.comments.destroy');
+Route::post('/feed/{type}/{post}/reaction', [SocialFeedActionController::class, 'reaction'])->where('type', 'event')->middleware('account:admin,alumni,alumni_officer,employer')->name('feed.reactions.store');
+Route::post('/feed/{type}/{post}/comments', [SocialFeedActionController::class, 'comment'])->where('type', 'event')->middleware('account:admin,alumni,alumni_officer,employer')->name('feed.comments.store');
+Route::delete('/feed/comments/{comment}', [SocialFeedActionController::class, 'destroyComment'])->middleware('account:admin,alumni,alumni_officer,employer')->name('feed.comments.destroy');
 Route::put('/events/{event}', UpdateEventController::class)->middleware('account')->name('events.update');
 Route::get('/archive', ArchiveController::class)->middleware('account:alumni_officer')->name('archive');

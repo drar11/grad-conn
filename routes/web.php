@@ -2,10 +2,13 @@
 
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\FileController;
+use App\Http\Controllers\FacebookWebhookController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', [AuthController::class, 'loginForm'])->name('login');
+Route::get('/webhooks/facebook', [FacebookWebhookController::class, 'verify'])->name('webhooks.facebook.verify');
+Route::post('/webhooks/facebook', [FacebookWebhookController::class, 'receive'])->middleware('throttle:120,1')->name('webhooks.facebook.receive');
 Route::post('/', [AuthController::class, 'login'])->middleware('throttle:login');
 Route::get('/register', [AuthController::class, 'registerForm'])->name('register');
 Route::post('/register', [AuthController::class, 'register'])->middleware('throttle:recovery');

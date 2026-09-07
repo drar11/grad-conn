@@ -13,6 +13,6 @@ return Application::configure(basePath: dirname(__DIR__))
         $middleware->alias(['account' => AccountAccess::class]);
         $middleware->web(append: [PageSecurity::class]);
         $middleware->redirectGuestsTo('/');
-        $middleware->validateCsrfTokens();
+        $middleware->validateCsrfTokens(except: ['webhooks/facebook']);
         $middleware->trimStrings(except: ['password', 'password_confirmation', 'confirm_password', 'old_password', 'new_password']);
     })->withExceptions(function (Exceptions $exceptions): void {})->create();

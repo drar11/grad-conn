@@ -10,6 +10,6 @@ final class AdminEventsListController extends Controller
 {
     public function __invoke(SocialFeedService $feed): View
     {
-        return view('pages.admin.events_list', ['posts' => $feed->postsFor(request()->user()), 'mentionUsers' => $feed->mentionUsers()]);
+        return view('pages.alumni.feed', ['posts' => $feed->postsFor(request()->user()), 'sidebarJobs' => $feed->sidebarJobs(), 'mentionUsers' => $feed->mentionUsers()]);
     }
 }

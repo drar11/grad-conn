@@ -61,6 +61,7 @@
         'employer' => [
             ['Overview', [
                 ['employer.dashboard', 'fa-chart-line', 'Dashboard'],
+                ['employer.community', 'fa-calendar-days', 'Community Feed'],
             ]],
             ['Recruitment', [
                 ['employer.alumni_list', 'fa-user-graduate', 'Alumni List'],

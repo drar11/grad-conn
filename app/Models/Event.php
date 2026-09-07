@@ -8,7 +8,7 @@ final class Event extends Model
 {
     public $timestamps = false;
 
-    protected $guarded = ['id', 'posted_by', 'created_at'];
+    protected $guarded = ['id', 'created_at'];
 
     protected function casts(): array
     {

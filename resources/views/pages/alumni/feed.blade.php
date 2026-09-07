@@ -5,6 +5,8 @@
 @section('content')
 @php
     $viewer = auth()->user();
+    $canManageFeed = in_array($viewer->role, ['admin', 'alumni_officer'], true);
+    $createPostRoute = $viewer->role === 'admin' ? 'admin.events_create' : 'alumni_officer.events_create';
     $initials = fn ($name) => collect(preg_split('/\\s+/', trim((string) $name)))->filter()->take(2)->map(fn ($part) => mb_strtoupper(mb_substr($part, 0, 1)))->join('') ?: 'U';
     $avatar = fn ($photo) => $photo ? url('/uploads/profiles/'.basename($photo)) : null;
     $shorten = fn ($text, $limit = 115) => mb_strlen(trim(strip_tags((string) $text))) > $limit ? mb_substr(trim(strip_tags((string) $text)), 0, $limit).'…' : (trim(strip_tags((string) $text)) ?: 'No description provided.');
@@ -21,7 +23,7 @@
         <section class="feed-column" aria-label="Community posts">
             <header class="feed-welcome">
                 <div><span class="feed-eyebrow">GradConn Community</span><h1>Community Feed</h1><p>Events, announcements, and opportunities from your alumni community.</p></div>
-                <a class="feed-jobs-link" href="{{ route('alumni.jobs') }}"><i class="fas fa-briefcase"></i> Browse jobs</a>
+                @if($canManageFeed)<a class="feed-jobs-link" href="{{ route($createPostRoute) }}"><i class="fas fa-plus"></i> Create post</a>@elseif($viewer->role === 'alumni')<a class="feed-jobs-link" href="{{ route('alumni.jobs') }}"><i class="fas fa-briefcase"></i> Browse jobs</a>@endif
             </header>
 
             @forelse($posts as $post)
@@ -54,6 +56,9 @@
                             </div>
                         @endif
                         <p>{!! nl2br(e($post['content'] ?? '')) !!}</p>
+                        @if(($post['source'] ?? '') === 'facebook' && !empty($post['source_url']))
+                            <a class="feed-link-preview" href="{{ $post['source_url'] }}" target="_blank" rel="noopener noreferrer"><span><i class="fab fa-facebook"></i> Facebook post</span><strong>View original post</strong><small>{{ $post['source_name'] ?? 'Facebook Page' }}</small></a>
+                        @endif
                         @if($postLink && $postLinkHost)
                             <a class="feed-link-preview" href="{{ $postLink }}" target="_blank" rel="noopener noreferrer">
                                 <span><i class="fas fa-link"></i> Shared website</span>
@@ -63,8 +68,9 @@
                         @endif
                     </div>
 
-                    @if(!empty($post['image']))
-                        <button class="feed-image-button" type="button" data-feed-image="{{ url('/uploads/events/'.basename($post['image'])) }}" aria-label="Open event image"><img src="{{ url('/uploads/events/'.basename($post['image'])) }}" alt="{{ $post['title'] }}"></button>
+                    @if(!empty($post['image']) || !empty($post['external_image_url']))
+                        @php($feedImage = !empty($post['external_image_url']) ? $post['external_image_url'] : url('/uploads/events/'.basename($post['image'])))
+                        <button class="feed-image-button" type="button" data-feed-image="{{ $feedImage }}" aria-label="Open post image"><img src="{{ $feedImage }}" alt="{{ $post['title'] }}"></button>
                     @endif
 
                     <div class="feed-engagement">
@@ -83,6 +89,7 @@
                             </div>
                         </form>
                         <button class="feed-action" type="button" data-comment-toggle="comments-{{ $postKey }}" data-comment-focus="comment-{{ $postKey }}"><i class="far fa-comment"></i> Comment</button>
+                        @if($canManageFeed)<form method="POST" action="{{ route('events.archive', $post['id']) }}">@csrf @method('PATCH')<button class="feed-action" type="submit"><i class="fas fa-box-archive"></i> Archive</button></form>@endif
                     </div>
 
                     <section class="feed-comments is-collapsed" id="comments-{{ $postKey }}">
@@ -135,7 +142,7 @@
                 </div>
                 @if(count($sidebarJobs) > 2)<button class="rail-toggle" type="button" data-job-toggle>Show more</button>@endif
             </section>
-            <section class="feed-rail-card rail-community"><h2>Stay connected</h2><p>Keep your profile current so employers and fellow graduates can recognize you.</p><a href="{{ route('profile') }}"><i class="fas fa-user-pen"></i> Update profile</a></section>
+            <section class="feed-rail-card rail-community"><h2>{{ $canManageFeed ? 'Community management' : 'Stay connected' }}</h2><p>{{ $canManageFeed ? 'Publish updates and moderate the shared GradConn community.' : 'Keep your profile current so the community can recognize you.' }}</p><a href="{{ $canManageFeed ? route($createPostRoute) : route('profile') }}"><i class="fas {{ $canManageFeed ? 'fa-plus' : 'fa-user-pen' }}"></i> {{ $canManageFeed ? 'Create post' : 'Update profile' }}</a></section>
         </aside>
     </div>
 </div>

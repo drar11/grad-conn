@@ -167,7 +167,7 @@ final class SocialFeedService
             ]);
         })->values()->all();
 
-        return array_merge($post->toArray(), ['post_type' => $type, 'poster' => $post->author?->fullname ?? 'GradConn', 'poster_photo' => $post->author?->profile_picture, 'reactions' => $reactions->toArray(), 'counts' => $counts, 'comments' => $threadedComments, 'comment_count' => $comments->count()]);
+        return array_merge($post->toArray(), ['post_type' => $type, 'poster' => $post->source === 'facebook' ? ($post->source_name ?: 'Facebook Page') : ($post->author?->fullname ?? 'GradConn'), 'poster_photo' => $post->author?->profile_picture, 'reactions' => $reactions->toArray(), 'counts' => $counts, 'comments' => $threadedComments, 'comment_count' => $comments->count()]);
     }
 
     private function mentionedUserIds(string $text): Collection
