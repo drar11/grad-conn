@@ -16,6 +16,7 @@ fi
 
 php artisan config:clear
 php artisan migrate --force
+php artisan jobs:expire
 if [ -n "${ADMIN_SEED_PASSWORD:-}" ]; then
     php artisan db:seed --class=AdminSeeder --force
 fi

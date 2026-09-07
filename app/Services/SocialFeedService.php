@@ -48,7 +48,10 @@ final class SocialFeedService
     public function sidebarJobs(): array
     {
         return Cache::remember('feed.sidebar-jobs.v1', config('performance.directory_cache_seconds'), fn () => Job::query()
-            ->where('is_open', true)->latest('id')->limit(5)->get(['id', 'title', 'employer_company', 'location', 'description'])->toArray());
+            ->where('is_open', true)
+            ->where(fn ($query) => $query->whereNull('start_date')->orWhereDate('start_date', '<=', today()))
+            ->where(fn ($query) => $query->whereNull('end_date')->orWhereDate('end_date', '>=', today()))
+            ->latest('id')->limit(5)->get(['id', 'title', 'employer_company', 'location', 'description'])->toArray());
     }
 
     public function mentionUsers(): array
