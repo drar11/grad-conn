@@ -22,6 +22,7 @@ Route::post('/auth/logout', [AuthController::class, 'logout'])->middleware('acco
 Route::get('/admin/view-resume', [FileController::class, 'resume'])->middleware('account:admin');
 Route::get('/applications/{application}/application-letter', [FileController::class, 'applicationLetter'])->middleware('account:admin,employer')->name('applications.letter');
 Route::get('/uploads/{path}', [FileController::class, 'upload'])->where('path', '.*')->middleware('account');
+// Kept for old email links; offer responses now happen inside the authenticated Browse Jobs > Job Offers page.
 Route::get('/job-offers/{jobOffer:offer_token}/accept', AcceptJobOfferController::class)->middleware('throttle:30,1')->name('job-offers.accept');
 Route::get('/admin/employer-list', fn () => to_route('admin.create_employer'))->middleware('account:admin');
 Route::get('/employer/my-jobs', fn () => to_route('employer.posted_job'))->middleware('account:employer');

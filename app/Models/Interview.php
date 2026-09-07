@@ -39,4 +39,9 @@ final class Interview extends Model
     {
         return $this->belongsTo(Job::class);
     }
+
+    public function offer()
+    {
+        return $this->belongsTo(JobOffer::class, 'offer_id');
+    }
 }

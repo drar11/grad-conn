@@ -37,4 +37,9 @@ final class JobOffer extends Model
     {
         return $this->belongsTo(User::class, 'alumni_id');
     }
+
+    public function interview()
+    {
+        return $this->hasOne(Interview::class, 'offer_id');
+    }
 }

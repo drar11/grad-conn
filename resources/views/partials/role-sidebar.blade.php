@@ -36,6 +36,7 @@
             ]],
             ['Career', [
                 ['alumni.jobs', 'fa-briefcase', 'Browse Jobs'],
+                ['alumni.job_offers', 'fa-envelope-open-text', 'Job Offers'],
                 ['alumni.my_applications', 'fa-file-signature', 'My Applications'],
                 ['alumni.employment_history', 'fa-clock-rotate-left', 'Employment History'],
             ]],
@@ -67,6 +68,7 @@
                 ['employer.alumni_list', 'fa-user-graduate', 'Alumni List'],
                 ['employer.post_job', 'fa-plus-circle', 'Create Job'],
                 ['employer.posted_job', 'fa-briefcase', 'Posted Jobs'],
+                ['employer.job_offers', 'fa-handshake', 'Job Offers'],
             ]],
             ['Account', [
                 ['profile', 'fa-user-circle', 'My Profile'],

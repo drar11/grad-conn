@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\SendJobOfferRequest;
 use App\Mail\JobOfferMail;
 use App\Models\JobOffer;
+use App\Models\EmployerActivityLog;
 use App\Models\User;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Support\Facades\Mail;
@@ -31,6 +32,7 @@ final class SendJobOfferController extends Controller
         ])->save();
         $offer->setRelation('employer', $request->user());
         $offer->setRelation('alumni', $alumni);
+        EmployerActivityLog::query()->create(['employer_id' => $request->user()->id, 'alumni_id' => $alumni->id, 'offer_id' => $offer->id, 'action' => 'job_offer_sent', 'details' => 'Sent job offer: '.$offer->subject]);
         Mail::to($alumni->email, $alumni->fullname)->queue(new JobOfferMail($offer));
 
         return to_route('employer.alumni_list')->with('status', 'Job offer email queued for '.$alumni->fullname.'.');
