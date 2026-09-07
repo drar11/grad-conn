@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Pages;
 
 use App\Http\Controllers\FileController;
 use App\Http\Controllers\PageController;
+use App\Models\Job;
 use App\Models\JobApplication;
 use Illuminate\Http\Request;
 
@@ -19,10 +20,19 @@ final class EmployerApplicationsController extends PageController
             $employer_id = $request->user()->id;
             $success = session('status', '');
             $error = '';
+            $job = null;
+            if ($request->filled('job_id')) {
+                $job = Job::query()
+                    ->whereKey($request->integer('job_id'))
+                    ->where('posted_by', $employer_id)
+                    ->firstOrFail();
+            }
+
             $models = JobApplication::query()
                 ->select(['id', 'job_id', 'alumni_id', 'applicant_fullname', 'applicant_email', 'applicant_course', 'applicant_batch_year', 'applicant_career_objective', 'applicant_skills', 'message', 'resume_file', 'status', 'cancel_reason', 'cancelled_at', 'created_at'])
-                ->with(['job:id,title,company,employer_company', 'alumni:id,fullname,email,course,batch_year,career_objective,skills'])
-                ->whereHas('job', fn ($q) => $q->where('posted_by', $employer_id)->orWhere('employer_id', $employer_id))
+                ->with(['job:id,title,company,employer_company', 'alumni.education', 'alumni.employmentHistory'])
+                ->whereHas('job', fn ($q) => $q->where('posted_by', $employer_id))
+                ->when($job, fn ($query) => $query->where('job_id', $job->id))
                 ->orderByDesc('id')->paginate(50)->withQueryString();
             $applications = $models->getCollection()->map(fn ($application) => [
                 'application_id' => $application->id,
@@ -41,6 +51,13 @@ final class EmployerApplicationsController extends PageController
                 'cancel_reason' => $application->cancel_reason,
                 'cancelled_at' => $application->cancelled_at,
                 'created_at' => $application->created_at,
+                'alumni_id' => $application->alumni_id,
+                'profile_picture' => $application->alumni?->profile_picture,
+                'age' => $application->alumni?->age,
+                'address' => $application->alumni?->address,
+                'work_experience' => $application->alumni?->work_experience,
+                'education' => $application->alumni?->education?->map->getAttributes()->all() ?? [],
+                'employment_history' => $application->alumni?->employmentHistory?->map->getAttributes()->all() ?? [],
             ]);
 
             return $this->pageView('pages.employer.applications', get_defined_vars());
